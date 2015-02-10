@@ -2,13 +2,20 @@ from Tkinter import *
 import tkFont
 import time
 import thread
+import socket
 
 root = Tk()
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+BUFFER_SIZE = 5120
+SERV_PORT = 1740
 username = ""
 servIP = ""
 
 ipEntry = Entry(root, width = 30,)
 userEntry = Entry(root, width = 30)
+
+chatList = []
 
 def main():
     
@@ -34,24 +41,27 @@ def main():
 
     connectButton = Button(root, text = "Connect", command = connect)
     connectButton.grid(row = 2, column = 1)
-    
-    
-    try:
-      thread.start_new_thread(rotater,())
-    except:
-      print "Error: unable to start thread"
+
+
+
       
     root.mainloop()
 
 def connect():
     servIP = ipEntry.get()
     username = userEntry.get()
-    print servIP
-    print username
+    if servIP != "" and username != "":
+        sock.connect(servIP, SERV_PORT)      
+        try:
+            thread.start_new_thread(chat,())
+        except:
+            print "Error: unable to start thread"
 
-def rotater():
+def chat():
     while 1:
-        time.sleep(1000)
-
+        chatList = array.fromstring(conn.recv(BUFFER_SIZE).fromString())
+        
+        
+        
 if __name__ == "__main__":
   main()
