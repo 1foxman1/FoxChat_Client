@@ -1,8 +1,8 @@
 from Tkinter import *
 import tkFont
-import time
 import thread
 import socket
+import pickle
 
 root = Tk()
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -16,6 +16,7 @@ ipEntry = Entry(root, width = 30,)
 userEntry = Entry(root, width = 30)
 
 chatList = []
+chatListBox = ListBox(root)
 
 def main():
     
@@ -42,7 +43,7 @@ def main():
     connectButton = Button(root, text = "Connect", command = connect)
     connectButton.grid(row = 2, column = 1)
 
-
+	chatListBox.grid(row = 4)
 
       
     root.mainloop()
@@ -59,9 +60,9 @@ def connect():
 
 def chat():
     while 1:
-        chatList = array.fromstring(conn.recv(BUFFER_SIZE).fromString())
-        
-        
-        
+        chatList = pickle.loads(conn.recv(BUFFER_SIZE))
+		for msg in chatList:
+			chatListBox.insert(END, msg)
+		   
 if __name__ == "__main__":
   main()
