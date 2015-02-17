@@ -18,6 +18,11 @@ msgEntry = Entry(root, width = 40)
 chatList = []
 chatListBox = Listbox(root)
 
+statusLabel = Label(root,
+               text = "Status: not connected ",
+               relief = "ridge",
+               font = tkFont.Font(size = 15))
+
 def main():
     
     root.geometry ("700x500")
@@ -54,6 +59,8 @@ def main():
     chatSendButton = Button(root, text = "Send", command = send)
     chatSendButton.grid(row = 6, column = 0)
     
+    statusLabel.grid(row = 4, column = 1)
+ 
     root.mainloop()
 
 def connect():
@@ -69,24 +76,29 @@ def connect():
             print "Error: unable to start thread"
 
 def recieve():
-    chatListBox.insert(0, "Connected")
-    i = 1
-    while 1:
-        inp = sock.recv(BUFFER_SIZE)
+    statusLabel["text"] = "Status: connected"
+    i = 0
+    inp = ""
+    while inp != "disconnect":
         chatListBox.insert(i, inp)
+        inp = sock.recv(BUFFER_SIZE)
         i += 1
 
 def send():
     username = userEntry.get()
     msg = msgEntry.get()
+    
     if(msg != ""):
         msg = (username + ": " + msg)
         print msg
         sock.send(msg)
+    msgEntry.delete(0, END)
 
 def disconnect():
+    statusLabel["text"] = "Status: not connected "
+    sock.send("disconnect")
     sock.close()
-    
-		   
+    removeSocket()
+
 if __name__ == "__main__":
   main()
