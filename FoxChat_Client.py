@@ -98,7 +98,6 @@ def disconnect():
     statusLabel["text"] = "Status: not connected "
     sock.send("disconnect")
     sock.close()
-    removeSocket()
 
 if __name__ == "__main__":
   main()
