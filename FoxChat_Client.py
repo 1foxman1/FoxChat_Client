@@ -2,7 +2,6 @@ from Tkinter import *
 import tkFont
 import thread
 import socket
-import pickle
 
 root = Tk()
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -49,10 +48,6 @@ def main():
     chatListBox.grid(row = 4)
     chatListBox['height'] = 20
     chatListBox['width'] = 50
-    chatListBox.insert(0, "Python")
-    chatListBox.delete(0)
-    chatListBox.insert(0, "yay")
-
 
     msgEntry.grid(row = 5, column = 0)
 
@@ -64,6 +59,8 @@ def main():
 def connect():
     servIP = ipEntry.get()
     username = userEntry.get()
+    print servIP
+    print username
     if servIP != "" and username != "":
         sock.connect((servIP, SERV_PORT))      
         try:
@@ -72,19 +69,18 @@ def connect():
             print "Error: unable to start thread"
 
 def recieve():
-    print "connected"
+    chatListBox.insert(0, "Connected")
+    i = 1
     while 1:
-        chatList = pickle.loads(sock.recv(BUFFER_SIZE))
-        i = 0
-        for msg in chatList:
-            chatListBox.delete(i)
-            chatListBox.insert(i, msg)
-            i += 1
+        inp = sock.recv(BUFFER_SIZE)
+        chatListBox.insert(i, inp)
+        i += 1
 
 def send():
+    username = userEntry.get()
     msg = msgEntry.get()
     if(msg != ""):
-        msg = username + msg
+        msg = (username + ": " + msg)
         print msg
         sock.send(msg)
 
