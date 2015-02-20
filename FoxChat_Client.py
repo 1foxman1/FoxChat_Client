@@ -10,6 +10,7 @@ BUFFER_SIZE = 1024
 SERV_PORT = 1997
 username = ""
 servIP = ""
+i = 0
 
 ipEntry = Entry(root, width = 30,)
 userEntry = Entry(root, width = 30)
@@ -72,18 +73,26 @@ def connect():
     print servIP
     print username
     if servIP != "" and username != "":
-        sock.connect((servIP, SERV_PORT))      
         try:
-            thread.start_new_thread(recieve,())
+            sock.connect((servIP, SERV_PORT))
+            
+            try:
+                thread.start_new_thread(recieve,())
+            except:
+                print "Error: unable to start thread"
+                
         except:
-            print "Error: unable to start thread"
+            statusLabel["text"] = "Status: Unable to connect "
+            
 
 def recieve():
     statusLabel["text"] = "Status: connected"
+    global i
     i = 0
     inp = ""
     while inp != "disconnect":
-        chatListBox.insert(i, inp)
+        if inp != "":
+            chatListBox.insert(i, inp)
         inp = sock.recv(BUFFER_SIZE)
         i += 1
 
@@ -101,6 +110,9 @@ def disconnect():
     statusLabel["text"] = "Status: not connected "
     sock.send("disconnect")
     sock.close()
+    global chatListBox
+    chatListBox.delete(0, i)
+    
 
 if __name__ == "__main__":
   main()
