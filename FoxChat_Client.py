@@ -2,6 +2,8 @@ from Tkinter import *
 import tkFont
 import thread
 import socket
+from datetime import datetime
+
 
 root = Tk()
 sock = socket.socket()
@@ -95,12 +97,15 @@ def connect():
             
 
 def recieve():
+    time = ""
     statusLabel["text"] = "Status: connected"
     global i
     i = 0
     inp = ""
     while inp != "disconnect":
         if inp != "":
+            time = datetime.now().strftime('%H:%M')
+            inp = "[%s] %s"%(time, inp)
             chatListBox.insert(i, inp)                            
             chatListBox.yview(END)   
         inp = sock.recv(BUFFER_SIZE)
@@ -109,7 +114,6 @@ def recieve():
 def send():
     username = userEntry.get()
     msg = msgEntry.get()
-    
     if(msg != ""):
         msg = (username + ": " + msg)
         print msg
