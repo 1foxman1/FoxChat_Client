@@ -4,7 +4,6 @@ import thread
 import socket
 from datetime import datetime
 
-
 root = Tk()
 sock = socket.socket()
 
@@ -21,7 +20,8 @@ userEntry = Entry(root, width = 30)
 msgEntry = Entry(root, width = 40)
 
 chatList = []
-chatListBox = Listbox(chatFrame)
+chatListBox = Listbox(chatFrame,
+                      font = tkFont.Font(size = 10))
 
 chatScrollbar = Scrollbar(chatFrame)
 
@@ -32,8 +32,9 @@ statusLabel = Label(root,
 
 def main():
     
-    root.geometry ("700x500")
+    root.geometry ("600x500")
     root.title ("FoxChat Client")
+    root.resizable(width = False, height = False)
     
     ipLabel = Label(root,
                text = "Enter chat server IP: ",
