@@ -4,7 +4,7 @@ import thread
 import socket
 
 root = Tk()
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock = socket.socket()
 
 BUFFER_SIZE = 1024
 SERV_PORT = 1997
@@ -64,6 +64,9 @@ def main():
     root.mainloop()
 
 def connect():
+    global sock
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
     servIP = ipEntry.get()
     username = userEntry.get()
     print servIP
