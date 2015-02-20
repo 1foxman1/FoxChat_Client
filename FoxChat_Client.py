@@ -6,6 +6,8 @@ import socket
 root = Tk()
 sock = socket.socket()
 
+chatFrame=Frame(root)
+
 BUFFER_SIZE = 1024
 SERV_PORT = 1997
 username = ""
@@ -17,7 +19,9 @@ userEntry = Entry(root, width = 30)
 msgEntry = Entry(root, width = 40)
 
 chatList = []
-chatListBox = Listbox(root)
+chatListBox = Listbox(chatFrame)
+
+chatScrollbar = Scrollbar(chatFrame)
 
 statusLabel = Label(root,
                text = "Status: not connected ",
@@ -51,10 +55,15 @@ def main():
     discoconnectButton = Button(root, text = "Disconnect", command = disconnect)
     discoconnectButton.grid(row = 3, column = 1)
 
-    chatListBox.grid(row = 4)
+    chatFrame.grid(row = 4)
+    chatListBox.pack(side = "left", fill = "both")
     chatListBox['height'] = 20
     chatListBox['width'] = 50
+    chatListBox.config(yscrollcommand=chatScrollbar.set)
 
+    chatScrollbar.pack( side = "right", fill = "y" )
+    chatScrollbar.config( command = chatListBox.yview )
+    
     msgEntry.grid(row = 5, column = 0)
 
     chatSendButton = Button(root, text = "Send", command = send)
