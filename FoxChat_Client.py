@@ -101,7 +101,8 @@ def recieve():
     inp = ""
     while inp != "disconnect":
         if inp != "":
-            chatListBox.insert(i, inp)
+            chatListBox.insert(i, inp)                            
+            chatListBox.yview(END)   
         inp = sock.recv(BUFFER_SIZE)
         i += 1
 
